@@ -24,6 +24,12 @@ An AI-powered Smart Attendance System built with **Django**, **DeepFace**, **Ten
 
 ---
 
+<img width="245" height="151" alt="image" src="https://github.com/user-attachments/assets/a6cc92dc-d977-4507-843c-85a3c6663303" />
+
+
+
+
+
 ## 🛠️ Tech Stack
 
 ### Backend
