@@ -6,6 +6,11 @@ An AI-powered Smart Attendance System built with **Django**, **DeepFace**, **Ten
 
 ---
 
+<img width="953" height="415" alt="image" src="https://github.com/user-attachments/assets/c720fb7b-90e1-402e-89ec-ffd2338d527c" />
+
+
+
+
 ## 🚀 Features
 
 - 👤 Student Registration with Photo Upload
