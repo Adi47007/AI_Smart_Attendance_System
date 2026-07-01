@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>
+Attendance Camera
+</title>
+
+<style>
+
+body{
+
+    text-align:center;
+
+    font-family:Arial;
+}
+
+video{
+
+    border:4px solid #333;
+
+    border-radius:10px;
+}
+
+#resultBox{
+
+    display:none;
+
+    margin:20px auto;
+
+    width:350px;
+
+    padding:15px;
+
+    font-size:20px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+}
+
+.success{
+
+    background:#28a745;
+
+    color:white;
+}
+
+.fail{
+
+    background:#dc3545;
+
+    color:white;
+}
+
+button{
+
+    margin-top:20px;
+
+    padding:10px 20px;
+
+    font-size:18px;
+
+    cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>
+Smart Attendance System
+</h1>
+
+<video
+id="video"
+width="640"
+height="480"
+autoplay>
+</video>
+
+<br>
+
+<button onclick="capture()">
+
+Mark Attendance
+
+</button>
+
+<div id="resultBox"></div>
+
+<canvas
+id="canvas"
+style="display:none;">
+</canvas>
+
+<script>
+
+navigator.mediaDevices
+.getUserMedia({
+    video:true
+})
+.then(stream=>{
+
+    document
+    .getElementById(
+        "video"
+    )
+    .srcObject = stream
+
+})
+
+
+function capture(){
+
+    const canvas =
+    document.getElementById(
+        "canvas"
+    )
+
+    const video =
+    document.getElementById(
+        "video"
+    )
+
+    canvas.width =
+    video.videoWidth
+
+    canvas.height =
+    video.videoHeight
+
+    canvas
+    .getContext("2d")
+    .drawImage(
+        video,
+        0,
+        0
+    )
+
+    const image =
+    canvas.toDataURL(
+        "image/jpeg"
+    )
+
+    const form =
+    new FormData()
+
+    form.append(
+        "image",
+        image
+    )
+
+    fetch(
+        "/mark/",
+        {
+            method:"POST",
+
+            headers:{
+                "X-CSRFToken":
+                "{{ csrf_token }}"
+            },
+
+            body:form
+        }
+    )
+
+    .then(response =>
+        response.json()
+    )
+
+    .then(data=>{
+
+        const box =
+        document.getElementById(
+            "resultBox"
+        )
+
+        box.style.display =
+        "block"
+
+        if(data.success){
+
+            box.className =
+            "success"
+
+            box.innerHTML =
+            `
+            ✅ Attendance Marked<br><br>
+
+            Name:
+            ${data.name}
+
+            <br><br>
+
+            Match Score:
+            ${data.distance}
+            `
+
+        }
+
+        else{
+
+            box.className =
+            "fail"
+
+            box.innerHTML =
+            `
+            ❌ Face Not Found
+            `
+        }
+
+    })
+
+}
+
+</script>
+
+</body>
+
+</html>
